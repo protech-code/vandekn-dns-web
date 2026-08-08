@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>PayloadContent</key>
+    <array>
+        <dict>
+            <key>DNSSettings</key>
+            <dict>
+                <key>DNSProtocol</key>
+                <string>HTTPS</string>
+                <key>ServerURL</key>
+                <string>https://dns.vandekn.qzz.io/dns-query</string>
+                <key>ServerAddresses</key>
+                <array>
+                    <string>1.1.1.1</string>
+                    <string>1.0.0.1</string>
+                </array>
+            </dict>
+            <key>PayloadDescription</key>
+            <string>Configures Encrypted DoH DNS for Vandekn DNS</string>
+            <key>PayloadDisplayName</key>
+            <string>Vandekn DNS (DoH)</string>
+            <key>PayloadIdentifier</key>
+            <string>com.vandekn.dns.doh</string>
+            <key>PayloadType</key>
+            <string>com.apple.dnsSettings.managed</string>
+            <key>PayloadUUID</key>
+            <string>8f56f1a0-4a81-4b11-921d-93c6f443a021</string>
+            <key>PayloadVersion</key>
+            <integer>1</integer>
+        </dict>
+    </array>
+    <key>PayloadDescription</key>
+    <string>Profile cài đặt hệ thống DoH Vandekn DNS bảo mật & chặn quảng cáo cho iOS</string>
+    <key>PayloadDisplayName</key>
+    <string>Vandekn DNS Profile</string>
+    <key>PayloadIdentifier</key>
+    <string>com.vandekn.dns.profile</string>
+    <key>PayloadOrganization</key>
+    <string>Vandekn DNS</string>
+    <key>PayloadRemovalDisallowed</key>
+    <false/>
+    <key>PayloadType</key>
+    <string>Configuration</string>
+    <key>PayloadUUID</key>
+    <string>03e35183-5a02-4c28-a40d-d40b08db91b8</string>
+    <key>PayloadVersion</key>
+    <integer>1</integer>
+</dict>
+</plist>
