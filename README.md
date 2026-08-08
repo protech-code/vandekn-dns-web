@@ -1,2 +1,2 @@
 # Vandekn-dns
-Is free
+Is free and better
