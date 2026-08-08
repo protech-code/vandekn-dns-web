@@ -1,0 +1,2265 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Vandekn DNS — DNS chặn quảng cáo</title>
+    <meta name="description"
+          content="Vandekn DNS — Lướt web sạch bóng quảng cáo, an toàn & tốc độ cao.">
+
+    <!-- =========================================================
+         TAILWIND CSS
+    ========================================================== -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- =========================================================
+         FONT AWESOME
+    ========================================================== -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- =========================================================
+         FONT
+    ========================================================== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    },
+                    colors: {
+                        cyber: '#22d3ee'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* =========================================================
+           GLOBAL
+        ========================================================== */
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background:
+                radial-gradient(circle at 50% -20%, rgba(34, 211, 238, .12), transparent 35%),
+                #05080d;
+            color: #e5e7eb;
+            overflow-x: hidden;
+        }
+
+        ::selection {
+            background: rgba(34, 211, 238, .3);
+            color: white;
+        }
+
+        /* =========================================================
+           BACKGROUND GRID
+        ========================================================== */
+
+        .grid-bg {
+            background-image:
+                linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* =========================================================
+           GLOW
+        ========================================================== */
+
+        .cyan-glow {
+            box-shadow:
+                0 0 30px rgba(34, 211, 238, .12),
+                inset 0 0 30px rgba(34, 211, 238, .025);
+        }
+
+        .text-glow {
+            text-shadow: 0 0 35px rgba(34, 211, 238, .3);
+        }
+
+        
+
+        /* =========================================================
+           HEADER
+        ========================================================== */
+
+        .navbar {
+            background: rgba(5, 8, 13, .72);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+        }
+
+        /* =========================================================
+           HERO ORB
+        ========================================================== */
+
+        .orb {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: rgba(34, 211, 238, .07);
+            filter: blur(80px);
+            pointer-events: none;
+        }
+
+        /* =========================================================
+           CARD
+        ========================================================== */
+
+        .glass-card {
+            background: rgba(13, 18, 27, .72);
+            border: 1px solid rgba(255,255,255,.07);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(34, 211, 238, .25);
+        }
+
+        /* =========================================================
+           TAB
+        ========================================================== */
+
+        .tab-button.active {
+            background: rgba(34, 211, 238, .12);
+            border-color: rgba(34, 211, 238, .35);
+            color: #67e8f9;
+        }
+
+        /* =========================================================
+           FAQ
+        ========================================================== */
+
+        .faq-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height .35s ease;
+        }
+
+        .faq-item.open .faq-content {
+            max-height: 300px;
+        }
+
+        .faq-icon {
+            transition: transform .3s ease;
+        }
+
+        .faq-item.open .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        /* =========================================================
+           STATUS ANIMATION
+        ========================================================== */
+
+        .status-dot {
+            animation: pulseStatus 2s infinite;
+        }
+
+        @keyframes pulseStatus {
+            0% {
+                box-shadow: 0 0 0 0 rgba(34, 197, 94, .5);
+            }
+
+            70% {
+                box-shadow: 0 0 0 12px rgba(34, 197, 94, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+            }
+        }
+
+        /* =========================================================
+           MUSIC BUTTON
+        ========================================================== */
+
+        .music-playing i {
+            animation: musicBars .8s infinite alternate;
+        }
+
+        @keyframes musicBars {
+            from {
+                transform: scaleY(.5);
+            }
+
+            to {
+                transform: scaleY(1.3);
+            }
+        }
+
+        /* =========================================================
+           TOAST
+        ========================================================== */
+
+        #toast {
+            transform: translateY(120px);
+            opacity: 0;
+            transition: all .3s ease;
+        }
+
+        #toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* =========================================================
+           MOBILE MENU
+        ========================================================== */
+
+        #mobileMenu {
+            transition:
+                max-height .3s ease,
+                opacity .3s ease;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen">
+
+<!-- =============================================================
+     CUSTOM CURSOR
+============================================================== -->
+
+<div id="customCursor" class="custom-cursor"></div>
+
+
+<!-- =============================================================
+     TOAST
+============================================================== -->
+
+<div id="toast"
+     class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999]
+            px-5 py-3 rounded-xl
+            bg-emerald-500/15 border border-emerald-400/30
+            text-emerald-300 backdrop-blur-xl">
+
+    <div class="flex items-center gap-3">
+        <i class="fa-solid fa-circle-check"></i>
+        <span id="toastMessage">Đã sao chép!</span>
+    </div>
+
+</div>
+
+
+<!-- =============================================================
+     HEADER
+============================================================== -->
+
+<header class="navbar fixed top-0 left-0 right-0 z-50 border-b border-white/5">
+
+    <div class="max-w-7xl mx-auto px-5">
+
+        <div class="h-20 flex items-center justify-between">
+
+            <!-- LOGO -->
+            <a href="#home"
+               class="flex items-center gap-3 group">
+
+                <div class="w-10 h-10 rounded-xl
+                            bg-cyan-400/10
+                            border border-cyan-300/20
+                            flex items-center justify-center
+                            group-hover:bg-cyan-400/20 transition">
+
+                    <i class="fa-solid fa-shield-halved text-cyan-300"></i>
+
+                </div>
+
+                <div>
+                    <div class="font-bold tracking-tight text-white">
+                        vandekn <span class="text-cyan-300">dns</span>
+                    </div>
+
+                    <div class="text-[10px] uppercase tracking-[.2em] text-gray-500">
+                        Clean Internet
+                    </div>
+                </div>
+
+            </a>
+
+
+            <!-- DESKTOP MENU -->
+
+            <nav class="hidden lg:flex items-center gap-8 text-sm text-gray-400">
+
+                <a href="#home" class="hover:text-cyan-300 transition">
+                    Trang chủ
+                </a>
+
+                <a href="#features" class="hover:text-cyan-300 transition">
+                    Tính năng
+                </a>
+
+                <a href="#setup" class="hover:text-cyan-300 transition">
+                    Hướng dẫn cài đặt
+                </a>
+
+                <a href="#status" class="hover:text-cyan-300 transition">
+                    Kiểm tra trạng thái
+                </a>
+
+                <a href="#faq" class="hover:text-cyan-300 transition">
+                    FAQ
+                </a>
+
+            </nav>
+
+
+            <!-- RIGHT -->
+
+            <div class="flex items-center gap-3">
+
+                <!-- MUSIC -->
+                <button id="musicButton"
+                        title="Bật/tắt nhạc"
+                        class="hidden sm:flex w-10 h-10
+                               rounded-xl border border-white/10
+                               items-center justify-center
+                               text-gray-400 hover:text-cyan-300
+                               hover:border-cyan-400/30 transition">
+
+                    <i class="fa-solid fa-music"></i>
+
+                </button>
+
+
+                <!-- CTA -->
+
+                <a href="#setup"
+                   class="hidden sm:flex items-center gap-2
+                          px-4 py-2.5 rounded-xl
+                          bg-cyan-400 text-black
+                          font-semibold text-sm
+                          hover:bg-cyan-300
+                          hover:shadow-lg hover:shadow-cyan-400/20
+                          transition">
+
+                    <i class="fa-solid fa-bolt"></i>
+
+                    Cài đặt ngay
+
+                </a>
+
+
+                <!-- MOBILE BUTTON -->
+
+                <button id="menuButton"
+                        class="lg:hidden w-10 h-10
+                               rounded-xl border border-white/10
+                               text-gray-300">
+
+                    <i class="fa-solid fa-bars"></i>
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- MOBILE MENU -->
+
+        <div id="mobileMenu"
+             class="lg:hidden max-h-0 opacity-0 overflow-hidden">
+
+            <nav class="pb-5 flex flex-col gap-2">
+
+                <a href="#home"
+                   class="mobile-link p-3 rounded-lg hover:bg-white/5">
+                    Trang chủ
+                </a>
+
+                <a href="#features"
+                   class="mobile-link p-3 rounded-lg hover:bg-white/5">
+                    Tính năng
+                </a>
+
+                <a href="#setup"
+                   class="mobile-link p-3 rounded-lg hover:bg-white/5">
+                    Hướng dẫn cài đặt
+                </a>
+
+                <a href="#status"
+                   class="mobile-link p-3 rounded-lg hover:bg-white/5">
+                    Kiểm tra trạng thái
+                </a>
+
+                <a href="#faq"
+                   class="mobile-link p-3 rounded-lg hover:bg-white/5">
+                    FAQ
+                </a>
+
+            </nav>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<!-- =============================================================
+     HERO
+============================================================== -->
+
+<main>
+
+<section id="home"
+         class="relative min-h-screen flex items-center
+                pt-28 overflow-hidden grid-bg">
+
+    <div class="orb -top-40 left-1/2 -translate-x-1/2"></div>
+
+    <div class="max-w-7xl mx-auto px-5 w-full">
+
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+
+            <!-- BADGE -->
+
+            <div class="inline-flex items-center gap-2
+                        px-4 py-2 rounded-full
+                        bg-cyan-400/5
+                        border border-cyan-400/15
+                        text-cyan-300 text-xs sm:text-sm
+                        mb-8">
+
+                <span class="w-2 h-2 rounded-full
+                             bg-emerald-400
+                             status-dot"></span>
+
+                Vandekn DNS đang hoạt động
+
+            </div>
+
+
+            <!-- TITLE -->
+
+            <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl
+                       font-extrabold tracking-tight
+                       leading-[1.05]
+                       text-white text-glow">
+
+                Trình chặn quảng cáo
+
+                <span class="block
+                             bg-gradient-to-r
+                             from-cyan-300
+                             via-sky-400
+                             to-emerald-300
+                             bg-clip-text text-transparent">
+
+                    cấp độ DNS cho mọi thiết bị
+
+                </span>
+
+            </h1>
+
+
+            <!-- DESCRIPTION -->
+
+            <p class="mt-7 max-w-2xl mx-auto
+                      text-gray-400
+                      text-base sm:text-lg
+                      leading-relaxed">
+
+                Chặn sạch quảng cáo, mã độc và trình theo dõi
+                chỉ với vài bước cài đặt DoH đơn giản.
+                Không cần cài phần mềm nặng máy.
+
+            </p>
+
+
+            <!-- DOH CARD -->
+
+            <div class="mt-10 max-w-3xl mx-auto">
+
+                <div class="glass-card cyan-glow
+                            rounded-2xl p-3 sm:p-4">
+
+                    <div class="flex flex-col sm:flex-row
+                                items-stretch sm:items-center
+                                gap-3">
+
+                        <div class="flex-1 text-left
+                                    px-3 py-2">
+
+                            <div class="text-[11px] uppercase
+                                        tracking-widest
+                                        text-gray-500 mb-1">
+
+                                DNS-over-HTTPS Endpoint
+
+                            </div>
+
+                            <code id="dohUrl"
+                                  class="text-cyan-300
+                                         text-xs sm:text-sm
+                                         break-all">
+
+                                https://dns.vandekn.qzz.io/dns-query
+
+                            </code>
+
+                        </div>
+
+
+                        <button id="copyButton"
+                                class="shrink-0
+                                       px-5 py-3
+                                       rounded-xl
+                                       bg-white/5
+                                       border border-white/10
+                                       hover:bg-cyan-400/10
+                                       hover:border-cyan-400/30
+                                       text-white
+                                       transition">
+
+                            <i class="fa-regular fa-copy mr-2"></i>
+
+                            Sao chép Link DoH
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- HERO BUTTONS -->
+
+            <div class="mt-8 flex flex-col sm:flex-row
+                        justify-center gap-3">
+
+                <a href="#setup"
+                   class="px-6 py-3.5 rounded-xl
+                          bg-cyan-400 text-black
+                          font-semibold
+                          hover:bg-cyan-300
+                          transition">
+
+                    <i class="fa-solid fa-download mr-2"></i>
+
+                    Bắt đầu cài đặt
+
+                </a>
+
+                <a href="#features"
+                   class="px-6 py-3.5 rounded-xl
+                          border border-white/10
+                          bg-white/[.03]
+                          hover:bg-white/[.06]
+                          transition">
+
+                    Khám phá tính năng
+
+                    <i class="fa-solid fa-arrow-down ml-2 text-cyan-300"></i>
+
+                </a>
+
+            </div>
+
+
+            <!-- TRUST -->
+
+            <div class="mt-14
+                        flex flex-wrap
+                        justify-center gap-x-8 gap-y-3
+                        text-xs text-gray-500">
+
+                <span>
+                    <i class="fa-solid fa-shield text-cyan-400 mr-2"></i>
+                    DNS Encryption
+                </span>
+
+                <span>
+                    <i class="fa-solid fa-bolt text-cyan-400 mr-2"></i>
+                    Low Latency
+                </span>
+
+                <span>
+                    <i class="fa-solid fa-lock text-cyan-400 mr-2"></i>
+                    Privacy First
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =============================================================
+     FEATURES
+============================================================== -->
+
+<section id="features" class="py-24 relative">
+
+    <div class="max-w-7xl mx-auto px-5">
+
+        <div class="text-center max-w-2xl mx-auto mb-14">
+
+            <div class="text-cyan-300 text-sm font-semibold mb-3">
+                TÍNH NĂNG
+            </div>
+
+            <h2 class="text-3xl sm:text-4xl
+                       font-bold text-white">
+
+                Internet sạch hơn.
+                <span class="text-cyan-300">An toàn hơn.</span>
+
+            </h2>
+
+            <p class="mt-4 text-gray-500">
+                Vandekn DNS lọc truy vấn DNS trước khi kết nối
+                tới các domain quảng cáo và tracker.
+            </p>
+
+        </div>
+
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+
+            <!-- FEATURE 1 -->
+
+            <div class="glass-card rounded-2xl p-6
+                        transition duration-300 hover:-translate-y-1">
+
+                <div class="w-12 h-12 rounded-xl
+                            bg-cyan-400/10
+                            flex items-center justify-center
+                            mb-6">
+
+                    <i class="fa-solid fa-ban text-cyan-300 text-xl"></i>
+
+                </div>
+
+                <h3 class="font-bold text-white text-lg">
+                    Chặn quảng cáo
+                </h3>
+
+                <p class="mt-3 text-sm text-gray-500 leading-relaxed">
+                    Giảm quảng cáo, pop-up và các domain
+                    theo dõi không mong muốn.
+                </p>
+
+            </div>
+
+
+            <!-- FEATURE 2 -->
+
+            <div class="glass-card rounded-2xl p-6
+                        transition duration-300 hover:-translate-y-1">
+
+                <div class="w-12 h-12 rounded-xl
+                            bg-emerald-400/10
+                            flex items-center justify-center
+                            mb-6">
+
+                    <i class="fa-solid fa-user-shield
+                              text-emerald-300 text-xl"></i>
+
+                </div>
+
+                <h3 class="font-bold text-white text-lg">
+                    Bảo vệ riêng tư
+                </h3>
+
+                <p class="mt-3 text-sm text-gray-500 leading-relaxed">
+                    Thiết kế theo hướng privacy-first.
+                    Không lưu log người dùng theo chính sách dịch vụ.
+                </p>
+
+            </div>
+
+
+            <!-- FEATURE 3 -->
+
+            <div class="glass-card rounded-2xl p-6
+                        transition duration-300 hover:-translate-y-1">
+
+                <div class="w-12 h-12 rounded-xl
+                            bg-blue-400/10
+                            flex items-center justify-center
+                            mb-6">
+
+                    <i class="fa-solid fa-gauge-high
+                              text-blue-300 text-xl"></i>
+
+                </div>
+
+                <h3 class="font-bold text-white text-lg">
+                    Tối ưu tốc độ
+                </h3>
+
+                <p class="mt-3 text-sm text-gray-500 leading-relaxed">
+                    DoH mã hóa truy vấn DNS giúp tăng
+                    tính riêng tư khi phân giải domain.
+                </p>
+
+            </div>
+
+
+            <!-- FEATURE 4 -->
+
+            <div class="glass-card rounded-2xl p-6
+                        transition duration-300 hover:-translate-y-1">
+
+                <div class="w-12 h-12 rounded-xl
+                            bg-purple-400/10
+                            flex items-center justify-center
+                            mb-6">
+
+                    <i class="fa-solid fa-layer-group
+                              text-purple-300 text-xl"></i>
+
+                </div>
+
+                <h3 class="font-bold text-white text-lg">
+                    Đa nền tảng
+                </h3>
+
+                <p class="mt-3 text-sm text-gray-500 leading-relaxed">
+                    Android, iOS, Windows, macOS, Linux,
+                    router và trình duyệt hiện đại.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =============================================================
+     SETUP
+============================================================== -->
+
+<section id="setup"
+         class="py-24 bg-white/[.015] border-y border-white/5">
+
+    <div class="max-w-7xl mx-auto px-5">
+
+        <div class="text-center max-w-2xl mx-auto mb-12">
+
+            <div class="text-cyan-300 text-sm font-semibold mb-3">
+                HƯỚNG DẪN CÀI ĐẶT
+            </div>
+
+            <h2 class="text-3xl sm:text-4xl font-bold text-white">
+                Cài đặt Vandekn DNS
+            </h2>
+
+            <p class="mt-4 text-gray-500">
+                Chọn thiết bị bạn đang sử dụng để xem hướng dẫn.
+            </p>
+
+        </div>
+
+
+        <!-- TABS -->
+
+        <div class="flex flex-wrap justify-center gap-2 mb-8">
+
+            <button class="tab-button active
+                           px-4 py-3 rounded-xl
+                           border border-white/10
+                           text-sm text-gray-400 transition"
+                    data-tab="ios">
+
+                <i class="fa-brands fa-apple mr-2"></i>
+                iOS / iPadOS
+
+            </button>
+
+            <button class="tab-button
+                           px-4 py-3 rounded-xl
+                           border border-white/10
+                           text-sm text-gray-400 transition"
+                    data-tab="android">
+
+                <i class="fa-brands fa-android mr-2"></i>
+                Android
+
+            </button>
+
+            <button class="tab-button
+                           px-4 py-3 rounded-xl
+                           border border-white/10
+                           text-sm text-gray-400 transition"
+                    data-tab="windows">
+
+                <i class="fa-brands fa-windows mr-2"></i>
+                Windows 11
+
+            </button>
+
+            <button class="tab-button
+                           px-4 py-3 rounded-xl
+                           border border-white/10
+                           text-sm text-gray-400 transition"
+                    data-tab="browser">
+
+                <i class="fa-solid fa-globe mr-2"></i>
+                Trình duyệt
+
+            </button>
+
+        </div>
+
+
+        <!-- TAB CONTENT -->
+
+        <div class="glass-card rounded-3xl p-6 sm:p-10">
+
+
+            <!-- =================================================
+                 IOS
+            ================================================== -->
+
+            <div class="tab-content" data-content="ios">
+
+                <div class="grid lg:grid-cols-2 gap-10">
+
+                    <div>
+
+                        <div class="inline-flex
+                                    w-14 h-14 rounded-2xl
+                                    bg-gray-500/10
+                                    items-center justify-center
+                                    mb-6">
+
+                            <i class="fa-brands fa-apple text-2xl"></i>
+
+                        </div>
+
+                        <h3 class="text-2xl font-bold text-white">
+                            iOS / iPadOS
+                        </h3>
+
+                        <p class="mt-3 text-gray-500">
+                            Cài profile DNS để thiết bị tự động
+                            sử dụng Vandekn DNS.
+                        </p>
+
+                        <!-- TODO:
+                             Thay URL bên dưới bằng link .mobileconfig thật
+                        -->
+
+                        <a href="https://raw.githubusercontent.com/minhduc290613/Vandekn-dns/refs/heads/main/vandekn-dns.mobileconfig"
+                           class="inline-flex items-center gap-2
+                                  mt-6 px-5 py-3
+                                  rounded-xl
+                                  bg-cyan-400 text-black
+                                  font-semibold">
+
+                            <i class="fa-solid fa-download"></i>
+
+                            Tải Profile iOS
+
+                        </a>
+
+                    </div>
+
+
+                    <div class="space-y-4">
+
+                        <div class="flex gap-4">
+
+                            <span class="w-8 h-8 shrink-0
+                                         rounded-full
+                                         bg-cyan-400/10
+                                         text-cyan-300
+                                         flex items-center justify-center
+                                         font-bold text-sm">
+
+                                1
+
+                            </span>
+
+                            <div>
+
+                                <h4 class="font-semibold text-white">
+                                    Tải Profile
+                                </h4>
+
+                                <p class="text-sm text-gray-500 mt-1">
+                                    Tải file cấu hình .mobileconfig
+                                    của Vandekn DNS.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="flex gap-4">
+
+                            <span class="w-8 h-8 shrink-0
+                                         rounded-full
+                                         bg-cyan-400/10
+                                         text-cyan-300
+                                         flex items-center justify-center
+                                         font-bold text-sm">
+
+                                2
+
+                            </span>
+
+                            <div>
+
+                                <h4 class="font-semibold text-white">
+                                    Mở Cài đặt
+                                </h4>
+
+                                <p class="text-sm text-gray-500 mt-1">
+                                    Vào Cài đặt → Đã tải về
+                                    và chọn profile.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="flex gap-4">
+
+                            <span class="w-8 h-8 shrink-0
+                                         rounded-full
+                                         bg-cyan-400/10
+                                         text-cyan-300
+                                         flex items-center justify-center
+                                         font-bold text-sm">
+
+                                3
+
+                            </span>
+
+                            <div>
+
+                                <h4 class="font-semibold text-white">
+                                    Cài đặt
+                                </h4>
+
+                                <p class="text-sm text-gray-500 mt-1">
+                                    Xác nhận cài đặt profile
+                                    để kích hoạt DNS.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 ANDROID
+            ================================================== -->
+
+            <div class="tab-content hidden" data-content="android">
+
+                <div class="grid lg:grid-cols-2 gap-10">
+
+                    <div>
+
+                        <div class="w-14 h-14 rounded-2xl
+                                    bg-emerald-400/10
+                                    flex items-center justify-center
+                                    mb-6">
+
+                            <i class="fa-brands fa-android
+                                      text-emerald-300 text-2xl"></i>
+
+                        </div>
+
+                        <h3 class="text-2xl font-bold text-white">
+                            Android
+                        </h3>
+
+                        <p class="mt-3 text-gray-500">
+                            Bạn có thể sử dụng ứng dụng Instra, Rethink DNS hoặc bất kỳ ứng dụng DNS-over-HTTPS nào
+                            để nhập endpoint DoH.
+                        </p>
+
+                    </div>
+
+
+                    <div class="space-y-5">
+
+                        <div class="p-5 rounded-2xl bg-white/[.03]
+                                    border border-white/5">
+
+                            <div class="text-cyan-300 font-semibold">
+                                Bước 1
+                            </div>
+
+                            <p class="text-sm text-gray-400 mt-2">
+                                Tải và cài ứng dụng
+                                <strong class="text-white">Rethink DNS</strong>
+                                Trên Google Play.
+                            </p>
+
+                        </div>
+
+
+                        <div class="p-5 rounded-2xl bg-white/[.03]
+                                    border border-white/5">
+
+                            <div class="text-cyan-300 font-semibold">
+                                Bước 2
+                            </div>
+
+                            <p class="text-sm text-gray-400 mt-2">
+                                Mở Rethink DNS và ấn vào cấu hình .
+                            </p>
+
+                        </div>
+
+                        <div class="p-5 rounded-2xl bg-white/[.03]
+                                    border border-white/5">
+
+                            <div class="text-cyan-300 font-semibold">
+                                Bước 3
+                            </div>
+
+                            <p class="text-sm text-gray-400 mt-2">
+                                ấn vào DOH Và chọn dấu + để thêm mới.
+                            </p>
+
+                        </div>
+
+
+                        <div class="p-5 rounded-2xl bg-white/[.03]
+                                    border border-white/5">
+
+                            <div class="text-cyan-300 font-semibold">
+                                Bước 4
+                            </div>
+
+                            <p class="text-sm text-gray-400 mt-2">
+                                Nhập URL:
+                            </p>
+
+                            <code class="block mt-3 p-3 rounded-lg
+                                         bg-black/30
+                                         text-cyan-300 text-xs break-all">
+
+                                https://dns.vandekn.qzz.io/dns-query
+
+                            </code>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 WINDOWS
+            ================================================== -->
+
+            <div class="tab-content hidden" data-content="windows">
+
+                <div class="grid lg:grid-cols-2 gap-10">
+
+                    <div>
+
+                        <div class="w-14 h-14 rounded-2xl
+                                    bg-blue-400/10
+                                    flex items-center justify-center
+                                    mb-6">
+
+                            <i class="fa-brands fa-windows
+                                      text-blue-300 text-2xl"></i>
+
+                        </div>
+
+                        <h3 class="text-2xl font-bold text-white">
+                            Windows 11
+                        </h3>
+
+                        <p class="mt-3 text-gray-500">
+                            Windows 11 có thể sử dụng DoH thông qua
+                            các ứng dụng hỗ trợ DNS-over-HTTPS.
+                        </p>
+
+                    </div>
+
+
+                    <div class="space-y-5">
+
+                        <div class="p-5 rounded-2xl
+                                    bg-white/[.03]
+                                    border border-white/5">
+
+                            <div class="flex gap-4">
+
+                                <span class="text-cyan-300 font-bold">
+                                    01
+                                </span>
+
+                                <div>
+
+                                    <h4 class="font-semibold text-white">
+                                        Cài ứng dụng DNS hỗ trợ DoH
+                                    </h4>
+
+                                    <p class="text-sm text-gray-500 mt-2">
+                                        Sử dụng một ứng dụng DNS
+                                        hỗ trợ cấu hình DoH tùy chỉnh ví dụ như
+                                        <strong class="text-white">SimpleDNSCrypt</strong>
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="p-5 rounded-2xl
+                                    bg-white/[.03]
+                                    border border-white/5">
+
+                            <div class="flex gap-4">
+
+                                <span class="text-cyan-300 font-bold">
+                                    02
+                                </span>
+
+                                <div>
+
+                                    <h4 class="font-semibold text-white">
+                                        Nhập endpoint
+                                    </h4>
+
+                                    <code class="block mt-3
+                                                 text-xs text-cyan-300
+                                                 break-all">
+
+                                        https://dns.vandekn.qzz.io/dns-query
+
+                                    </code>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="p-5 rounded-2xl
+                                    bg-white/[.03]
+                                    border border-white/5">
+
+                            <div class="flex gap-4">
+
+                                <span class="text-cyan-300 font-bold">
+                                    03
+                                </span>
+
+                                <div>
+
+                                    <h4 class="font-semibold text-white">
+                                        Kích hoạt DNS
+                                    </h4>
+
+                                    <p class="text-sm text-gray-500 mt-2">
+                                        Bật cấu hình và kiểm tra lại
+                                        trạng thái DNS.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 BROWSER
+            ================================================== -->
+
+            <div class="tab-content hidden" data-content="browser">
+
+                <div class="grid lg:grid-cols-2 gap-10">
+
+                    <div>
+
+                        <div class="w-14 h-14 rounded-2xl
+                                    bg-purple-400/10
+                                    flex items-center justify-center
+                                    mb-6">
+
+                            <i class="fa-solid fa-globe
+                                      text-purple-300 text-2xl"></i>
+
+                        </div>
+
+                        <h3 class="text-2xl font-bold text-white">
+                            Chrome / Firefox / Edge
+                        </h3>
+
+                        <p class="mt-3 text-gray-500">
+                            Các trình duyệt hiện đại hỗ trợ
+                            Secure DNS / DNS-over-HTTPS.
+                        </p>
+
+                    </div>
+
+
+                    <div class="space-y-5">
+
+                        <div class="p-5 rounded-2xl bg-white/[.03]
+                                    border border-white/5">
+
+                            <h4 class="font-semibold text-white">
+                                Chrome
+                            </h4>
+
+                            <p class="text-sm text-gray-500 mt-2">
+                                Settings → Privacy and security
+                                → Security → Use secure DNS.
+                            </p>
+
+                        </div>
+
+
+                        <div class="p-5 rounded-2xl bg-white/[.03]
+                                    border border-white/5">
+
+                            <h4 class="font-semibold text-white">
+                                Edge
+                            </h4>
+
+                            <p class="text-sm text-gray-500 mt-2">
+                                Settings → Privacy, search and services
+                                → Security → Use secure DNS.
+                            </p>
+
+                        </div>
+
+
+                        <div class="p-5 rounded-2xl bg-white/[.03]
+                                    border border-white/5">
+
+                            <h4 class="font-semibold text-white">
+                                Firefox
+                            </h4>
+
+                            <p class="text-sm text-gray-500 mt-2">
+                                Settings → Privacy & Security
+                                → DNS over HTTPS.
+                            </p>
+
+                        </div>
+
+
+                        <div class="p-4 rounded-xl
+                                    bg-cyan-400/5
+                                    border border-cyan-400/10">
+
+                            <div class="text-xs text-gray-500 mb-2">
+                                DoH Endpoint
+                            </div>
+
+                            <code class="text-xs text-cyan-300 break-all">
+
+                                https://dns.vandekn.qzz.io/dns-query
+
+                            </code>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =============================================================
+     STATUS CHECKER
+============================================================== -->
+
+<section id="status" class="py-24">
+
+
+<div class="max-w-5xl mx-auto px-5">
+
+    <!-- TITLE -->
+    <div class="text-center mb-12">
+
+        <div class="text-cyan-300 text-sm font-semibold mb-3">
+            AD BLOCK TEST
+        </div>
+
+        <h2 class="text-3xl sm:text-4xl font-bold text-white">
+            Kiểm tra khả năng chặn quảng cáo
+        </h2>
+
+        <p class="mt-4 max-w-2xl mx-auto text-gray-500">
+            Kiểm tra xem Vandekn DNS có đang chặn quảng cáo,
+            tracker và các kết nối không mong muốn trên thiết bị của bạn.
+        </p>
+
+    </div>
+
+
+    <!-- TEST CARD -->
+    <div class="glass-card cyan-glow rounded-3xl overflow-hidden">
+
+        <!-- CARD HEADER -->
+        <div class="p-6 sm:p-8 border-b border-white/5">
+
+            <div class="flex flex-col md:flex-row
+                        items-start md:items-center
+                        justify-between gap-6">
+
+                <div class="flex items-center gap-4">
+
+                    <div class="w-14 h-14 rounded-2xl
+                                bg-cyan-400/10
+                                border border-cyan-400/20
+                                flex items-center justify-center">
+
+                        <i class="fa-solid fa-shield-halved
+                                  text-cyan-300 text-2xl"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h3 class="text-xl font-bold text-white">
+                            Adblock Turtlecute
+                        </h3>
+
+                        <p class="text-sm text-gray-500 mt-1">
+                            Kiểm tra trực tiếp bằng công cụ Turtlecute
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- OPEN TEST -->
+                <a href="https://adblock.turtlecute.org/"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="w-full md:w-auto
+                          inline-flex items-center justify-center
+                          gap-2 px-5 py-3 rounded-xl
+                          bg-cyan-400 text-black
+                          font-semibold
+                          hover:bg-cyan-300
+                          hover:shadow-lg
+                          hover:shadow-cyan-400/20
+                          transition">
+
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+
+                    Bắt đầu kiểm tra
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- TEST INFO -->
+        <div class="p-6 sm:p-8">
+
+            <div class="grid sm:grid-cols-3 gap-4">
+
+
+                <!-- HOST -->
+                <div class="p-5 rounded-2xl
+                            bg-white/[.03]
+                            border border-white/5">
+
+                    <div class="w-10 h-10 rounded-xl
+                                bg-emerald-400/10
+                                flex items-center justify-center
+                                mb-4">
+
+                        <i class="fa-solid fa-server
+                                  text-emerald-300"></i>
+
+                    </div>
+
+                    <h4 class="font-semibold text-white">
+                        Host Blocking
+                    </h4>
+
+                    <p class="text-xs text-gray-500 mt-2 leading-relaxed">
+                        Kiểm tra các domain quảng cáo,
+                        tracker và analytics có bị chặn hay không.
+                    </p>
+
+                </div>
+
+
+                <!-- SCRIPT -->
+                <div class="p-5 rounded-2xl
+                            bg-white/[.03]
+                            border border-white/5">
+
+                    <div class="w-10 h-10 rounded-xl
+                                bg-blue-400/10
+                                flex items-center justify-center
+                                mb-4">
+
+                        <i class="fa-solid fa-code
+                                  text-blue-300"></i>
+
+                    </div>
+
+                    <h4 class="font-semibold text-white">
+                        Ad Scripts
+                    </h4>
+
+                    <p class="text-xs text-gray-500 mt-2 leading-relaxed">
+                        Kiểm tra khả năng ngăn các script
+                        quảng cáo và tracking tải xuống.
+                    </p>
+
+                </div>
+
+
+                <!-- COSMETIC -->
+                <div class="p-5 rounded-2xl
+                            bg-white/[.03]
+                            border border-white/5">
+
+                    <div class="w-10 h-10 rounded-xl
+                                bg-purple-400/10
+                                flex items-center justify-center
+                                mb-4">
+
+                        <i class="fa-solid fa-wand-magic-sparkles
+                                  text-purple-300"></i>
+
+                    </div>
+
+                    <h4 class="font-semibold text-white">
+                        Cosmetic Filter
+                    </h4>
+
+                    <p class="text-xs text-gray-500 mt-2 leading-relaxed">
+                        Kiểm tra khả năng loại bỏ các
+                        thành phần quảng cáo trên trang.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- NOTICE -->
+            <div class="mt-6 p-4 rounded-xl
+                        bg-cyan-400/5
+                        border border-cyan-400/10">
+
+                <div class="flex gap-3">
+
+                    <i class="fa-solid fa-circle-info
+                              text-cyan-300 mt-0.5"></i>
+
+                    <p class="text-xs text-gray-500 leading-relaxed">
+
+                        Công cụ kiểm tra sẽ chạy trực tiếp trên trình duyệt.
+                        Kết quả phụ thuộc vào cấu hình DNS, trình duyệt
+                        và các trình chặn quảng cáo khác đang sử dụng.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- EXTERNAL LINK -->
+    <div class="text-center mt-5">
+
+        <a href="https://adblock.turtlecute.org/"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="text-sm text-gray-500
+                  hover:text-cyan-300 transition">
+
+            <i class="fa-solid fa-flask mr-2"></i>
+
+            Mở Ad Blocker Test của Turtlecute
+
+            <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i>
+
+        </a>
+
+    </div>
+
+</div>
+
+
+</section>
+
+
+
+<!-- =============================================================
+     FAQ
+============================================================== -->
+
+<section id="faq"
+         class="py-24 bg-white/[.015] border-y border-white/5">
+
+    <div class="max-w-3xl mx-auto px-5">
+
+        <div class="text-center mb-12">
+
+            <div class="text-cyan-300 text-sm font-semibold mb-3">
+                FAQ
+            </div>
+
+            <h2 class="text-3xl sm:text-4xl font-bold text-white">
+                Câu hỏi thường gặp
+            </h2>
+
+        </div>
+
+
+        <div class="space-y-3">
+
+
+            <!-- FAQ 1 -->
+
+            <div class="faq-item glass-card rounded-2xl overflow-hidden">
+
+                <button class="faq-button w-full p-5
+                               flex items-center justify-between
+                               text-left">
+
+                    <span class="font-semibold text-white">
+                        DoH là gì?
+                    </span>
+
+                    <i class="faq-icon fa-solid fa-chevron-down
+                              text-gray-500"></i>
+
+                </button>
+
+                <div class="faq-content">
+
+                    <div class="px-5 pb-5 text-sm
+                                leading-relaxed text-gray-500">
+
+                        DoH (DNS-over-HTTPS) là giao thức gửi truy vấn DNS
+                        thông qua kết nối HTTPS được mã hóa, giúp hạn chế
+                        việc bên thứ ba theo dõi hoặc can thiệp vào truy vấn DNS.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- FAQ 2 -->
+
+            <div class="faq-item glass-card rounded-2xl overflow-hidden">
+
+                <button class="faq-button w-full p-5
+                               flex items-center justify-between
+                               text-left">
+
+                    <span class="font-semibold text-white">
+                        DoH có làm chậm mạng không?
+                    </span>
+
+                    <i class="faq-icon fa-solid fa-chevron-down
+                              text-gray-500"></i>
+
+                </button>
+
+                <div class="faq-content">
+
+                    <div class="px-5 pb-5 text-sm
+                                leading-relaxed text-gray-500">
+
+                        DoH chủ yếu thay đổi cách gửi truy vấn DNS.
+                        Tốc độ thực tế phụ thuộc vào vị trí máy chủ,
+                        đường truyền và thời gian phản hồi của DNS resolver.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- FAQ 3 -->
+
+            <div class="faq-item glass-card rounded-2xl overflow-hidden">
+
+                <button class="faq-button w-full p-5
+                               flex items-center justify-between
+                               text-left">
+
+                    <span class="font-semibold text-white">
+                        DoH có an toàn hơn VPN không?
+                    </span>
+
+                    <i class="faq-icon fa-solid fa-chevron-down
+                              text-gray-500"></i>
+
+                </button>
+
+                <div class="faq-content">
+
+                    <div class="px-5 pb-5 text-sm
+                                leading-relaxed text-gray-500">
+
+                        DoH và VPN phục vụ các mục đích khác nhau.
+                        DoH mã hóa truy vấn DNS, trong khi VPN có thể
+                        định tuyến phần lớn lưu lượng Internet qua tunnel.
+                        Vì vậy DoH không phải là sự thay thế hoàn toàn cho VPN.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- FAQ 4 -->
+
+            <div class="faq-item glass-card rounded-2xl overflow-hidden">
+
+                <button class="faq-button w-full p-5
+                               flex items-center justify-between
+                               text-left">
+
+                    <span class="font-semibold text-white">
+                        Vandekn DNS có mất phí không?
+                    </span>
+
+                    <i class="faq-icon fa-solid fa-chevron-down
+                              text-gray-500"></i>
+
+                </button>
+
+                <div class="faq-content">
+
+                    <div class="px-5 pb-5 text-sm
+                                leading-relaxed text-gray-500">
+
+                        Chính sách miễn phí hoặc trả phí phụ thuộc vào
+                        cấu hình dịch vụ Vandekn DNS. Hãy cập nhật phần này
+                        theo chính sách thực tế của dịch vụ.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- FAQ 5 -->
+
+            <div class="faq-item glass-card rounded-2xl overflow-hidden">
+
+                <button class="faq-button w-full p-5
+                               flex items-center justify-between
+                               text-left">
+
+                    <span class="font-semibold text-white">
+                        Vandekn DNS có chặn được 100% quảng cáo không?
+                    </span>
+
+                    <i class="faq-icon fa-solid fa-chevron-down
+                              text-gray-500"></i>
+
+                </button>
+
+                <div class="faq-content">
+
+                    <div class="px-5 pb-5 text-sm
+                                leading-relaxed text-gray-500">
+
+                        Không có DNS blocker nào đảm bảo chặn 100% mọi
+                        quảng cáo. Một số quảng cáo được phân phối cùng
+                        domain với nội dung chính hoặc cần phương pháp
+                        chặn ở cấp trình duyệt/thiết bị.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<!-- =============================================================
+     FOOTER
+============================================================== -->
+
+<footer class="py-12">
+
+    <div class="max-w-7xl mx-auto px-5">
+
+        <div class="flex flex-col md:flex-row
+                    justify-between gap-8
+                    pb-8 border-b border-white/5">
+
+
+            <div>
+
+                <div class="flex items-center gap-3">
+
+                    <div class="w-10 h-10 rounded-xl
+                                bg-cyan-400/10
+                                border border-cyan-400/20
+                                flex items-center justify-center">
+
+                        <i class="fa-solid fa-shield-halved
+                                  text-cyan-300"></i>
+
+                    </div>
+
+                    <div class="font-bold text-white">
+                        vandekn <span class="text-cyan-300">dns</span>
+                    </div>
+
+                </div>
+
+                <p class="mt-4 max-w-sm
+                          text-sm text-gray-600 leading-relaxed">
+
+                    Lướt web sạch bóng quảng cáo,
+                    an toàn & tốc độ cao.
+
+                </p>
+
+            </div>
+
+
+            <div class="flex flex-col sm:flex-row gap-10">
+
+                <div>
+
+                    <div class="text-sm font-semibold text-white mb-4">
+                        Điều hướng
+                    </div>
+
+                    <div class="space-y-2 text-sm text-gray-500">
+
+                        <a href="#home"
+                           class="block hover:text-cyan-300">
+                            Trang chủ
+                        </a>
+
+                        <a href="#features"
+                           class="block hover:text-cyan-300">
+                            Tính năng
+                        </a>
+
+                        <a href="#setup"
+                           class="block hover:text-cyan-300">
+                            Cài đặt
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <div>
+
+                    <div class="text-sm font-semibold text-white mb-4">
+                        Hỗ trợ
+                    </div>
+
+                    <div class="space-y-2 text-sm text-gray-500">
+
+
+                        <a href="mailto:support@vandekn.qzz.io"
+                           class="block hover:text-cyan-300">
+
+                            support@vandekn.qzz.io
+
+                        </a>
+
+                        <a href="#faq"
+                           class="block hover:text-cyan-300">
+
+                            FAQ
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="pt-7 flex flex-col sm:flex-row
+                    justify-between gap-3
+                    text-xs text-gray-600">
+
+            <div>
+                © 2026 Minhduc290613 made with ❤️.
+            </div>
+
+            <div>
+                Powered by Vandekn
+            </div>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+<!-- =============================================================
+     AUDIO
+     
+     TODO:
+     Thay URL file nhạc bên dưới bằng file nhạc của bạn.
+     Ví dụ:
+     https://your-domain.com/music.mp3
+============================================================== -->
+
+<audio id="backgroundMusic"
+       loop
+       preload="none">
+
+    <source src="music.mp3" type="audio/mpeg">
+
+</audio>
+
+
+<!-- =============================================================
+     JAVASCRIPT
+============================================================== -->
+
+<script>
+
+    /* =========================================================
+       CẤU HÌNH
+       
+       Bạn có thể thay đổi các thông tin chính tại đây.
+    ========================================================== */
+
+    const VANDEKN_CONFIG = {
+        /*
+         * TODO:
+         * Thay endpoint DoH nếu bạn đổi server.
+         */
+        dohUrl: "https://dns.vandekn.qzz.io/dns-query",
+
+        /*
+         * TODO:
+         * Có thể thêm IP DNS nếu server của bạn có IP riêng.
+         */
+        dnsIPv4: "",
+
+        /*
+         * TODO:
+         * Link profile iOS.
+         */
+        iosProfile: "#"
+    };
+
+
+    /* =========================================================
+       HELPER: TOAST
+    ========================================================== */
+
+    let toastTimer;
+
+    function showToast(message) {
+
+        const toast = document.getElementById("toast");
+        const toastMessage = document.getElementById("toastMessage");
+
+        toastMessage.textContent = message;
+
+        toast.classList.add("show");
+
+        clearTimeout(toastTimer);
+
+        toastTimer = setTimeout(() => {
+            toast.classList.remove("show");
+        }, 2500);
+    }
+
+
+    /* =========================================================
+       COPY DOH URL
+    ========================================================== */
+
+    const copyButton = document.getElementById("copyButton");
+
+    copyButton.addEventListener("click", async () => {
+
+        const url = VANDEKN_CONFIG.dohUrl;
+
+        try {
+
+            await navigator.clipboard.writeText(url);
+
+            showToast("Đã sao chép Link DoH!");
+
+            copyButton.innerHTML =
+                '<i class="fa-solid fa-check mr-2"></i>Đã sao chép';
+
+            setTimeout(() => {
+
+                copyButton.innerHTML =
+                    '<i class="fa-regular fa-copy mr-2"></i>Sao chép Link DoH';
+
+            }, 1800);
+
+        } catch (error) {
+
+            showToast("Không thể sao chép tự động.");
+
+        }
+
+    });
+
+
+    /* =========================================================
+       SET DOH URL TO UI
+    ========================================================== */
+
+    document.getElementById("dohUrl").textContent =
+        VANDEKN_CONFIG.dohUrl;
+
+
+    /* =========================================================
+       SETUP TABS
+    ========================================================== */
+
+    const tabButtons = document.querySelectorAll(".tab-button");
+    const tabContents = document.querySelectorAll(".tab-content");
+
+    tabButtons.forEach(button => {
+
+        button.addEventListener("click", () => {
+
+            const target = button.dataset.tab;
+
+
+            // Xóa trạng thái active
+
+            tabButtons.forEach(btn => {
+                btn.classList.remove("active");
+            });
+
+
+            // Active tab hiện tại
+
+            button.classList.add("active");
+
+
+            // Ẩn tất cả content
+
+            tabContents.forEach(content => {
+
+                content.classList.add("hidden");
+
+            });
+
+
+            // Hiện content tương ứng
+
+            const selectedContent =
+                document.querySelector(
+                    `[data-content="${target}"]`
+                );
+
+            if (selectedContent) {
+                selectedContent.classList.remove("hidden");
+            }
+
+        });
+
+    });
+
+
+    /* =========================================================
+       FAQ ACCORDION
+    ========================================================== */
+
+    const faqButtons =
+        document.querySelectorAll(".faq-button");
+
+    faqButtons.forEach(button => {
+
+        button.addEventListener("click", () => {
+
+            const currentItem =
+                button.closest(".faq-item");
+
+
+            // Đóng các FAQ khác
+
+            document.querySelectorAll(".faq-item")
+                .forEach(item => {
+
+                    if (item !== currentItem) {
+                        item.classList.remove("open");
+                    }
+
+                });
+
+
+            // Toggle FAQ hiện tại
+
+            currentItem.classList.toggle("open");
+
+        });
+
+    });
+
+
+    /* =========================================================
+       MOBILE MENU
+    ========================================================== */
+
+    const menuButton =
+        document.getElementById("menuButton");
+
+    const mobileMenu =
+        document.getElementById("mobileMenu");
+
+    let mobileMenuOpen = false;
+
+    menuButton.addEventListener("click", () => {
+
+        mobileMenuOpen = !mobileMenuOpen;
+
+        if (mobileMenuOpen) {
+
+            mobileMenu.style.maxHeight = "400px";
+            mobileMenu.style.opacity = "1";
+
+            menuButton.innerHTML =
+                '<i class="fa-solid fa-xmark"></i>';
+
+        } else {
+
+            mobileMenu.style.maxHeight = "0";
+            mobileMenu.style.opacity = "0";
+
+            menuButton.innerHTML =
+                '<i class="fa-solid fa-bars"></i>';
+
+        }
+
+    });
+
+
+    /* Đóng menu khi click link */
+
+    document.querySelectorAll(".mobile-link")
+        .forEach(link => {
+
+            link.addEventListener("click", () => {
+
+                mobileMenuOpen = false;
+
+                mobileMenu.style.maxHeight = "0";
+                mobileMenu.style.opacity = "0";
+
+                menuButton.innerHTML =
+                    '<i class="fa-solid fa-bars"></i>';
+
+            });
+
+        });
+
+
+
+    /* =========================================================
+       CUSTOM CURSOR
+    ========================================================== */
+
+    const cursor =
+        document.getElementById("customCursor");
+
+    document.addEventListener("mousemove", event => {
+
+        cursor.style.left = event.clientX + "px";
+        cursor.style.top = event.clientY + "px";
+
+    });
+
+
+    const interactiveElements =
+        document.querySelectorAll(
+            "a, button, input, .faq-button, .tab-button"
+        );
+
+    interactiveElements.forEach(element => {
+
+        element.addEventListener("mouseenter", () => {
+            cursor.classList.add("active");
+        });
+
+        element.addEventListener("mouseleave", () => {
+            cursor.classList.remove("active");
+        });
+
+    });
+
+
+    /* =========================================================
+       BACKGROUND MUSIC
+       
+       Trình duyệt thường chặn autoplay có âm thanh.
+       Vì vậy nhạc chỉ bắt đầu sau khi người dùng click nút.
+    ========================================================== */
+
+    const music =
+        document.getElementById("backgroundMusic");
+
+    const musicButton =
+        document.getElementById("musicButton");
+
+    let musicPlaying = false;
+
+
+    musicButton.addEventListener("click", async () => {
+
+        try {
+
+            if (!musicPlaying) {
+
+                await music.play();
+
+                musicPlaying = true;
+
+                musicButton.classList.add("music-playing");
+
+                musicButton.innerHTML =
+                    '<i class="fa-solid fa-volume-high"></i>';
+
+                showToast("Đã bật nhạc nền");
+
+            } else {
+
+                music.pause();
+
+                musicPlaying = false;
+
+                musicButton.classList.remove("music-playing");
+
+                musicButton.innerHTML =
+                    '<i class="fa-solid fa-volume-xmark"></i>';
+
+                showToast("Đã tắt nhạc nền");
+
+            }
+
+        } catch (error) {
+
+            showToast("Không thể phát nhạc.");
+
+        }
+
+    });
+
+
+    /* =========================================================
+       iOS PROFILE BUTTON
+    ========================================================== */
+
+    document.querySelectorAll('a[href="#"]').forEach(link => {
+
+        if (link.textContent.includes("Tải Profile")) {
+
+            link.href =
+                VANDEKN_CONFIG.iosProfile;
+
+        }
+
+    });
+
+
+    /* =========================================================
+       CONSOLE
+    ========================================================== */
+
+    console.log(
+        "%cVandekn DNS",
+        "color:#22d3ee;font-size:24px;font-weight:bold"
+    );
+
+    console.log(
+        "DoH:",
+        VANDEKN_CONFIG.dohUrl
+    );
+
+</script>
+
+</body>
+</html>
