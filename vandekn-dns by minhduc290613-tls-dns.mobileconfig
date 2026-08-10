@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>PayloadContent</key>
+    <array>
+        <dict>
+            <key>DNSSettings</key>
+            <dict>
+                <key>DNSProtocol</key>
+                <string>TLS</string>
+                <key>ServerAddresses</key>
+                <array>
+                    <string>1.1.1.1</string>
+                </array>
+                <key>ServerName</key>
+                <string>https://dns.vandekn.qzz.io/dns-query</string>
+            </dict>
+            <key>PayloadDescription</key>
+            <string>Configures device to use Vandekn DNS by Minhduc290613 DNS over TLS</string>
+            <key>PayloadDisplayName</key>
+            <string>Vandekn DNS by Minhduc290613 DNS over TLS</string>
+            <key>PayloadIdentifier</key>
+            <string>com.apple.dnsSettings.managed.60c3d578-2465-4224-ae62-b276d455c6b1</string>
+            <key>PayloadType</key>
+            <string>com.apple.dnsSettings.managed</string>
+            <key>PayloadUUID</key>
+            <string>c0465013-03b7-422f-9959-e9e420624d3e</string>
+            <key>PayloadVersion</key>
+            <integer>1</integer>
+            <key>ProhibitDisablement</key>
+            <false/>
+        </dict>
+    </array>
+    <key>PayloadDescription</key>
+    <string>Adds the Vandekn DNS by Minhduc290613 DNS over TLS to MacOS and iOS based systems</string>
+    <key>PayloadDisplayName</key>
+    <string>Vandekn DNS by Minhduc290613 DNS over TLS</string>
+    <key>PayloadIdentifier</key>
+    <string>com.barleybobs.apple-dns</string>
+    <key>PayloadRemovalDisallowed</key>
+    <false/>
+    <key>PayloadType</key>
+    <string>Configuration</string>
+    <key>PayloadUUID</key>
+    <string>204fab36-d8f6-4307-95f6-0df33edca893</string>
+    <key>PayloadVersion</key>
+    <integer>1</integer>
+</dict>
+</plist>

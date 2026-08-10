@@ -868,7 +868,7 @@
                              Thay URL bên dưới bằng link .mobileconfig thật
                         -->
 
-                        <a href="https://raw.githubusercontent.com/minhduc290613/Vandekn-dns/refs/heads/main/vandekn-dns.mobileconfig"
+                        <a href="https://tino.io.vn/file/vandekn-dns by minhduc290613-tls-dns.mobileconfig"
                            class="inline-flex items-center gap-2
                                   mt-6 px-5 py-3
                                   rounded-xl
@@ -1022,7 +1022,7 @@
 
                             <p class="text-sm text-gray-400 mt-2">
                                 Tải và cài ứng dụng
-                                <strong class="text-white">Rethink DNS</strong>
+                                <strong><a href="https://play.google.com/store/apps/details?id=com.celzero.bravedns" class="text-white">Rethink DNS</a></strong>
                                 Trên Google Play.
                             </p>
 
@@ -1050,7 +1050,20 @@
                             </div>
 
                             <p class="text-sm text-gray-400 mt-2">
-                                ấn vào DOH Và chọn dấu + để thêm mới.
+                                Ấn vào DNS Và chọn DNS khác.
+                            </p>
+
+                        </div>
+
+                        <div class="p-5 rounded-2xl bg-white/[.03]
+                                    border border-white/5">
+
+                            <div class="text-cyan-300 font-semibold">
+                                Bước 5
+                            </div>
+
+                            <p class="text-sm text-gray-400 mt-2">
+                                Ấn vào DOH Và chọn Dấu + để thêm mới.
                             </p>
 
                         </div>
@@ -1060,7 +1073,7 @@
                                     border border-white/5">
 
                             <div class="text-cyan-300 font-semibold">
-                                Bước 4
+                                Bước 6
                             </div>
 
                             <p class="text-sm text-gray-400 mt-2">
@@ -1074,6 +1087,19 @@
                                 https://dns.vandekn.qzz.io/dns-query
 
                             </code>
+
+                        </div>
+
+                        <div class="p-5 rounded-2xl bg-white/[.03]
+                                    border border-white/5">
+
+                            <div class="text-cyan-300 font-semibold">
+                                Bước 7
+                            </div>
+
+                            <p class="text-sm text-gray-400 mt-2">
+                                Thoát ra màn hình chính và bật Rethink DNS để kích hoạt Vandekn DNS.
+                            </p>
 
                         </div>
 
@@ -1136,8 +1162,7 @@
 
                                     <p class="text-sm text-gray-500 mt-2">
                                         Sử dụng một ứng dụng DNS
-                                        hỗ trợ cấu hình DoH tùy chỉnh ví dụ như
-                                        <strong class="text-white">SimpleDNSCrypt</strong>
+                                        hỗ trợ cấu hình DoH tùy chỉnh ví dụ như Technitium DNS
                                     </p>
 
                                 </div>
@@ -1849,6 +1874,11 @@
 
                         </a>
 
+                        <a href="https://www.facebook.com/profile.php?id=61588580439353"
+                           class="block hover:text-cyan-300">
+                            Facebook
+                        </a>
+
                     </div>
 
                 </div>
@@ -1867,7 +1897,7 @@
             </div>
 
             <div>
-                Powered by Vandekn
+                Powered by Cloudflare Workers.
             </div>
 
         </div>
@@ -1879,16 +1909,11 @@
 
 <!-- =============================================================
      AUDIO
-     
-     TODO:
-     Thay URL file nhạc bên dưới bằng file nhạc của bạn.
-     Ví dụ:
-     https://your-domain.com/music.mp3
 ============================================================== -->
 
 <audio id="backgroundMusic"
        loop
-       preload="none">
+       preload="auto">
 
     <source src="music.mp3" type="audio/mpeg">
 
@@ -1924,7 +1949,7 @@
          * TODO:
          * Link profile iOS.
          */
-        iosProfile: "#"
+        iosProfile: "https://tino.io.vn/file/vandekn-dns by minhduc290613-tls-dns.mobileconfig"
     };
 
 
@@ -2139,37 +2164,6 @@
 
 
 
-    /* =========================================================
-       CUSTOM CURSOR
-    ========================================================== */
-
-    const cursor =
-        document.getElementById("customCursor");
-
-    document.addEventListener("mousemove", event => {
-
-        cursor.style.left = event.clientX + "px";
-        cursor.style.top = event.clientY + "px";
-
-    });
-
-
-    const interactiveElements =
-        document.querySelectorAll(
-            "a, button, input, .faq-button, .tab-button"
-        );
-
-    interactiveElements.forEach(element => {
-
-        element.addEventListener("mouseenter", () => {
-            cursor.classList.add("active");
-        });
-
-        element.addEventListener("mouseleave", () => {
-            cursor.classList.remove("active");
-        });
-
-    });
 
 
     /* =========================================================
@@ -2179,86 +2173,196 @@
        Vì vậy nhạc chỉ bắt đầu sau khi người dùng click nút.
     ========================================================== */
 
-    const music =
-        document.getElementById("backgroundMusic");
 
-    const musicButton =
-        document.getElementById("musicButton");
+/* =========================================================
+   AUTO BACKGROUND MUSIC
+   ========================================================= */
 
-    let musicPlaying = false;
+const music = document.getElementById("backgroundMusic");
+const musicButton = document.getElementById("musicButton");
+
+let musicPlaying = false;
 
 
-    musicButton.addEventListener("click", async () => {
+/* ---------------------------------------------------------
+   Cập nhật giao diện nút nhạc
+--------------------------------------------------------- */
 
-        try {
+function updateMusicButton() {
 
-            if (!musicPlaying) {
+    if (musicPlaying) {
 
-                await music.play();
+        musicButton.classList.add("music-playing");
 
-                musicPlaying = true;
+        musicButton.innerHTML =
+            '<i class="fa-solid fa-volume-high"></i>';
 
-                musicButton.classList.add("music-playing");
+        musicButton.title = "Tắt nhạc";
 
-                musicButton.innerHTML =
-                    '<i class="fa-solid fa-volume-high"></i>';
+    } else {
 
-                showToast("Đã bật nhạc nền");
+        musicButton.classList.remove("music-playing");
 
-            } else {
+        musicButton.innerHTML =
+            '<i class="fa-solid fa-volume-xmark"></i>';
 
-                music.pause();
+        musicButton.title = "Bật nhạc";
 
-                musicPlaying = false;
+    }
 
-                musicButton.classList.remove("music-playing");
+}
 
-                musicButton.innerHTML =
-                    '<i class="fa-solid fa-volume-xmark"></i>';
 
-                showToast("Đã tắt nhạc nền");
+/* ---------------------------------------------------------
+   Bật nhạc
+--------------------------------------------------------- */
 
-            }
+async function startBackgroundMusic() {
 
-        } catch (error) {
+    try {
 
-            showToast("Không thể phát nhạc.");
+        music.volume = 0.35;
 
-        }
+        await music.play();
+
+        musicPlaying = true;
+
+        updateMusicButton();
+
+        console.log("Vandekn DNS: Background music started");
+
+        return true;
+
+    } catch (error) {
+
+        /*
+         * Trình duyệt đã chặn autoplay.
+         * Sẽ thử lại sau khi người dùng tương tác.
+         */
+
+        console.log(
+            "Autoplay bị trình duyệt chặn, chờ người dùng tương tác."
+        );
+
+        return false;
+
+    }
+
+}
+
+
+/* ---------------------------------------------------------
+   Thử tự động phát khi trang tải
+--------------------------------------------------------- */
+
+    window.addEventListener("load", () => {
+
+        startBackgroundMusic();
 
     });
 
 
-    /* =========================================================
-       iOS PROFILE BUTTON
-    ========================================================== */
+/* ---------------------------------------------------------
+   Nếu autoplay bị chặn:
+   Chỉ cần người dùng click/chạm lần đầu,
+   nhạc sẽ tự động phát.
+--------------------------------------------------------- */
 
-    document.querySelectorAll('a[href="#"]').forEach(link => {
+    const startMusicOnInteraction = async () => {
 
-        if (link.textContent.includes("Tải Profile")) {
+        if (!musicPlaying) {
+        await startBackgroundMusic();
+    }
 
-            link.href =
-                VANDEKN_CONFIG.iosProfile;
+    /*
+     * Chỉ cần chạy một lần.
+     */
+    document.removeEventListener(
+        "click",
+        startMusicOnInteraction
+    );
+
+    document.removeEventListener(
+        "touchstart",
+        startMusicOnInteraction
+    );
+
+    document.removeEventListener(
+        "keydown",
+        startMusicOnInteraction
+    );
+
+};
+
+
+document.addEventListener(
+    "click",
+    startMusicOnInteraction,
+    { once: false }
+);
+
+document.addEventListener(
+    "touchstart",
+    startMusicOnInteraction,
+    { once: false }
+);
+
+document.addEventListener(
+    "keydown",
+    startMusicOnInteraction,
+    { once: false }
+);
+
+
+/* ---------------------------------------------------------
+   Nút bật / tắt nhạc thủ công
+--------------------------------------------------------- */
+
+musicButton.addEventListener("click", async (event) => {
+
+    /*
+     * Không để click này kích hoạt logic
+     * startMusicOnInteraction thêm lần nữa.
+     */
+    event.stopPropagation();
+
+
+    if (musicPlaying) {
+
+        music.pause();
+
+        musicPlaying = false;
+
+        updateMusicButton();
+
+        showToast("Đã tắt nhạc nền");
+
+    } else {
+
+        const started = await startBackgroundMusic();
+
+        if (started) {
+
+            showToast("Đã bật nhạc nền");
+
+        } else {
+
+            showToast("Trình duyệt đang chặn phát nhạc");
 
         }
 
-    });
+    }
+
+});
 
 
-    /* =========================================================
-       CONSOLE
-    ========================================================== */
+/* ---------------------------------------------------------
+   Trạng thái ban đầu
+--------------------------------------------------------- */
 
-    console.log(
-        "%cVandekn DNS",
-        "color:#22d3ee;font-size:24px;font-weight:bold"
-    );
+updateMusicButton();
 
-    console.log(
-        "DoH:",
-        VANDEKN_CONFIG.dohUrl
-    );
-
+</script>
 </script>
 
 </body>

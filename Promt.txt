@@ -1,0 +1,52 @@
+Bạn là một chuyên gia thiết kế UI/UX và lập trình viên Frontend hàng đầu. Hãy tạo mã nguồn (HTML, Tailwind CSS, JavaScript) cho một trang web Landing Page giới thiệu và hướng dẫn cài đặt dịch vụ DNS chặn quảng cáo qua DoH (DNS-over-HTTPS) có tên là "vandekn dns".
+
+### 1. THÔNG TIN THƯƠNG HIỆU & KỸ THUẬT:
+- Tên dịch vụ: Vandekn DNS
+- Slogan: "Lướt web sạch bóng quảng cáo, an toàn & tốc độ cao"
+- Link DoH mẫu: https://dns.vandekn.qzz.io/dns-query (hoặc URL cấu hình profiles)
+
+### 2. PHONG CÁCH THIẾT KẾ (UI/UX):
+- Phong cách: Hiện đại, tối giản, mang thiên hướng công nghệ (tương tự NextDNS, Cloudflare hoặc AdGuard).
+- Tông màu chủ đạo: Tối (Dark mode) với accent màu xanh công nghệ (Cyber Blue/Neon Cyan) hoặc xanh lá an toàn.
+- Yêu cầu: Responsive hoàn hảo trên Mobile, Tablet và Desktop.
+
+### 3. BỐ CỤC & NỘI DUNG CÁC PHẦN TRÊN WEBSITE:
+
+1. **Header / Navigation:**
+   - Logo: "vandekn dns" (kèm icon lá chắn/sét).
+   - Menu: Trang chủ, Tính năng, Hướng dẫn cài đặt, Kiểm tra trạng thái, FAQ.
+   - Nút CTA: "Cài đặt ngay" (Smooth scroll xuống phần hướng dẫn).
+   - Có nhạc hay
+   - Có chuột tùy chỉnh
+
+2. **Hero Section:**
+   - Tiêu đề lớn: "Trình chặn quảng cáo cấp độ DNS cho mọi thiết bị".
+   - Mô tả ngắn: "Chặn sạch quảng cáo, mã độc và trình theo dõi chỉ với vài bước cài đặt DoH đơn giản. Không cần cài phần mềm nặng máy."
+   - Thẻ hiển thị nhanh Link DoH kèm nút **"Sao chép Link DoH"** (có hiệu ứng Toast thông báo khi copy thành công).
+
+3. **Tính năng nổi bật (Features):**
+   - Chặn quảng cáo & Pop-up tối đa.
+   - Bảo vệ riêng tư (Không lưu log người dùng).
+   - Tốc độ truy cập tối ưu nhờ giao thức DNS-over-HTTPS (DoH).
+   - Tương thích 100% với Android, iOS, Windows, macOS, Linux, Router.
+
+4. **Khu vực Hướng dẫn cài đặt (Setup Guides) - QUAN TRỌNG:**
+   - Thiết kế dạng **Tabs (Thẻ chuyển đổi)** cho từng hệ điều hành:
+     * **iOS / iPadOS:** Hướng dẫn tải Profile cấu hình (.mobileconfig) hoặc cài qua Safari.
+     * **Android:** Hướng dẫn Tải App instra và hướng dẫn nhập "link" trong Instra.
+     * **Windows 11:** hướng dẫn chạy dns bằng các app trên mạng
+     * **Trình duyệt (Chrome/Firefox/Edge):** Hướng dẫn bật Secure DNS trong cài đặt trình duyệt.
+
+5. **Công cụ kiểm tra trạng thái (DNS Status Checker Widget):**
+   - Một khung nhỏ giả lập kiểm tra: Hiển thị hiệu ứng trạng thái "Đã kết nối với vandekn dns" (xanh) hoặc "Chưa kích hoạt" (đỏ) kèm lời khuyên.
+
+6. **Câu hỏi thường gặp (FAQ - Accordion Style):**
+   - DoH là gì? Có làm chậm mạng không? Có an toàn hơn VPN không? Có mất phí không?
+
+7. **Footer:**
+   - Thông tin bản quyền vandekn dns, liên hệ hỗ trợ.
+
+### 4. YÊU CẦU MÃ NGUỒN:
+- Tạo toàn bộ trong 1 file `index.html` duy nhất (sử dụng Tailwind CSS qua CDN và FontAwesome cho icon).
+- Viết JavaScript thuần để xử lý: Chuyển Tab hướng dẫn, Nút Copy DoH URL, Nút Toggle/Open cho Accordion FAQ.
+- Viết code sạch, có comment rõ ràng các phần để tôi dễ dàng chỉnh sửa link DoH hoặc IP sau này.
