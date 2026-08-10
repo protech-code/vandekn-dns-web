@@ -1,0 +1,184 @@
+        /* =========================================================
+           GLOBAL
+        ========================================================== */
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background:
+                radial-gradient(circle at 50% -20%, rgba(34, 211, 238, .12), transparent 35%),
+                #05080d;
+            color: #e5e7eb;
+            overflow-x: hidden;
+        }
+
+        ::selection {
+            background: rgba(34, 211, 238, .3);
+            color: white;
+        }
+
+        /* =========================================================
+           BACKGROUND GRID
+        ========================================================== */
+
+        .grid-bg {
+            background-image:
+                linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* =========================================================
+           GLOW
+        ========================================================== */
+
+        .cyan-glow {
+            box-shadow:
+                0 0 30px rgba(34, 211, 238, .12),
+                inset 0 0 30px rgba(34, 211, 238, .025);
+        }
+
+        .text-glow {
+            text-shadow: 0 0 35px rgba(34, 211, 238, .3);
+        }
+
+        
+
+        /* =========================================================
+           HEADER
+        ========================================================== */
+
+        .navbar {
+            background: rgba(5, 8, 13, .72);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+        }
+
+        /* =========================================================
+           HERO ORB
+        ========================================================== */
+
+        .orb {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: rgba(34, 211, 238, .07);
+            filter: blur(80px);
+            pointer-events: none;
+        }
+
+        /* =========================================================
+           CARD
+        ========================================================== */
+
+        .glass-card {
+            background: rgba(13, 18, 27, .72);
+            border: 1px solid rgba(255,255,255,.07);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(34, 211, 238, .25);
+        }
+
+        /* =========================================================
+           TAB
+        ========================================================== */
+
+        .tab-button.active {
+            background: rgba(34, 211, 238, .12);
+            border-color: rgba(34, 211, 238, .35);
+            color: #67e8f9;
+        }
+
+        /* =========================================================
+           FAQ
+        ========================================================== */
+
+        .faq-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height .35s ease;
+        }
+
+        .faq-item.open .faq-content {
+            max-height: 300px;
+        }
+
+        .faq-icon {
+            transition: transform .3s ease;
+        }
+
+        .faq-item.open .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        /* =========================================================
+           STATUS ANIMATION
+        ========================================================== */
+
+        .status-dot {
+            animation: pulseStatus 2s infinite;
+        }
+
+        @keyframes pulseStatus {
+            0% {
+                box-shadow: 0 0 0 0 rgba(34, 197, 94, .5);
+            }
+
+            70% {
+                box-shadow: 0 0 0 12px rgba(34, 197, 94, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+            }
+        }
+
+        /* =========================================================
+           MUSIC BUTTON
+        ========================================================== */
+
+        .music-playing i {
+            animation: musicBars .8s infinite alternate;
+        }
+
+        @keyframes musicBars {
+            from {
+                transform: scaleY(.5);
+            }
+
+            to {
+                transform: scaleY(1.3);
+            }
+        }
+
+        /* =========================================================
+           TOAST
+        ========================================================== */
+
+        #toast {
+            transform: translateY(120px);
+            opacity: 0;
+            transition: all .3s ease;
+        }
+
+        #toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* =========================================================
+           MOBILE MENU
+        ========================================================== */
+
+        #mobileMenu {
+            transition:
+                max-height .3s ease,
+                opacity .3s ease;
+        }
