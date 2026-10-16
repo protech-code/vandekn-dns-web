@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -26,6 +25,11 @@
 </head>
 
 <body>
+    <audio id="backgroundMusic" loop preload="auto">
+        <source src="./asset/audio/music.mp3" type="audio/mpeg">
+        Trình duyệt không hỗ trợ âm thanh.
+    </audio>
+
     <div class="grid-bg"></div>
     <div class="ambient one"></div>
     <div class="ambient two"></div>
@@ -273,7 +277,41 @@
         });
 
         setupGithubLink();
+
+        (() => {
+            const music = document.getElementById("backgroundMusic");
+
+            // Âm lượng nhạc từ 0.0 đến 1.0
+            music.volume = 0.4;
+
+            // Thử phát nhạc tự động khi mở trang
+            const tryPlayMusic = () => {
+                music.play().catch(() => {
+                    // Trình duyệt chặn autoplay:
+                    // chờ người dùng tương tác với trang.
+                });
+            };
+
+            tryPlayMusic();
+
+            // Thử phát lại sau tương tác đầu tiên của người dùng
+            const resumeMusic = () => {
+                if (music.paused) {
+                    tryPlayMusic();
+                }
+            };
+
+            document.addEventListener("pointerdown", resumeMusic);
+            document.addEventListener("keydown", resumeMusic);
+            document.addEventListener("touchstart", resumeMusic);
+
+            // Dọn listener sau khi nhạc bắt đầu phát thành công
+            music.addEventListener("playing", () => {
+                document.removeEventListener("pointerdown", resumeMusic);
+                document.removeEventListener("keydown", resumeMusic);
+                document.removeEventListener("touchstart", resumeMusic);
+            }, { once: true });
+        })();
     </script>
 </body>
 </html>
-```
